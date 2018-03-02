@@ -26,38 +26,7 @@ end
 
 
 
-1. Parent-id ,self join
-2.10 Self Joins
-Ans : In designing a data model, you will sometimes find a model that should have a relation to itself. For example, you may want to store all employees in a single database model, but be able to trace relationships such as between manager and subordinates. This situation can be modeled with self-joining associations:
 
-class Employee < ApplicationRecord
-  has_many :subordinates, class_name: "Employee",
-                          foreign_key: "manager_id"
- 
-  belongs_to :manager, class_name: "Employee"
-end
-
-With this setup, you can retrieve @employee.subordinates and @employee.manager.
-
-In your migrations/schema, you will add a references column to the model itself.
-
-class CreateEmployees < ActiveRecord::Migration[5.0]
-  def change
-    create_table :employees do |t|
-      t.references :manager, index: true
-      t.timestamps
-    end
-  end
-end
-
-
-Practical:
-
-class User < ApplicationRecord
-  has_many :children ,class_name: "User", foreign_key: "parent_id"
-  has_many :grandchildren, :through => :children, :source => :children
-  belongs_to :parent, class_name: "User"
-end
 
 
 2. Include vs Join
